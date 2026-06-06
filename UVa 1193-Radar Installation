@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define usopen(filename) do{freopen(filename".in", "r", stdin); freopen(filename".out", "w", stdout);}while(0);
+#define f first
+#define s second
+#define ll long long
+
+struct Point{
+    ll x, y;
+};
+
+bool cmp(pair<double, double> &a, pair<double, double> &b){
+    if (a.f == b.f){
+        return a.s > b.s;
+    }
+    return a.f < b.f;
+}
+
+int main(){
+    int t = 1; 
+    int n; ll d;
+    cin >> n >> d;
+    while (!(n==0 && d == 0)){
+        vector<Point> a(n);
+        for (int i = 0; i < n; i++){
+            cin >> a[i].x >> a[i].y;
+        }
+        ll mn = 0;
+        for (int i = 0; i < n; i++){
+            mn = max(mn, abs(a[i].y));
+        }
+        if (mn > d){
+            cout << "Case " << t << ": " << -1 << '\n'; t++;
+        }else{
+            vector<pair<double, double>> c(n);
+            for (int i = 0; i < n; i++){
+                double tr = sqrt(d*d - a[i].y*a[i].y);
+                c[i] = {a[i].x -tr, a[i].x+tr};
+            }
+            sort(c.begin(), c.end(), cmp);
+            int cnt = 0;
+            int ans = 0;
+            double cur ;
+            while (cnt < n){
+                cur = c[cnt].s; cnt++;
+                while (cnt < n && (c[cnt].f <= cur)){
+                    cur = min(cur, c[cnt].s);
+                    cnt++;
+                }
+                ans++;
+            }
+            cout << "Case " << t << ": " << ans << '\n'; t++;
+        }
+        cin >> n >> d;
+    }
+    
+    return 0;
+}
