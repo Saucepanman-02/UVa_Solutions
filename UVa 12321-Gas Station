@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define usopen(filename) do{freopen(filename".in", "r", stdin); freopen(filename".out", "w", stdout);}while(0);
+#define f first
+#define s second
+#define ll long long
+
+
+bool cmp(pair<int, int>& a, pair<int, int>& b){
+    if (a.f == b.f){
+        return a.s > b.s;
+    }
+    return a.f < b.f;
+}
+
+int main(){
+    int l, g;
+    while (cin >> l >> g && !(l == 0 && g == 0)){
+        vector<pair<int, int>> a(g);
+        for (int i = 0; i < g; i++){
+            int x, r; cin >> x >> r;
+            a[i] = {max(x-r, 0), min(x+r, l)};
+        }
+        sort(a.begin(), a.end(), cmp);
+        int cur = 0;
+        for (int i = 0; i < g; i++){
+            if (a[i].f <= cur){
+                cur = max(cur, a[i].s);
+            }
+        }
+        if (cur != l){
+            cout << -1 << '\n';
+        }else{
+            int ans = 0;
+            cur = 0;
+            int c = 0;
+            while (c < g && cur < l){
+                int mx = 0;
+                while (c < g && a[c].f <= cur){
+                    mx = max(mx, a[c].s); c++;
+                }
+                cur = mx;
+                ans++;
+            }
+            cout << g-ans << '\n';
+        }
+    }
+    return 0;
+}
